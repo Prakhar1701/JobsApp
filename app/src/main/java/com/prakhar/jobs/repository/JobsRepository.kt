@@ -1,11 +1,13 @@
 package com.prakhar.jobs.repository
 
+import com.prakhar.jobs.data.JobsDatabase
 import com.prakhar.jobs.data.Resource
+import com.prakhar.jobs.model.JobBookmark
 import com.prakhar.jobs.model.Result
 import com.prakhar.jobs.network.JobsAPI
 import javax.inject.Inject
 
-class JobsRepository @Inject constructor(private val api: JobsAPI) {
+class JobsRepository @Inject constructor(private val api: JobsAPI, private val database: JobsDatabase) {
 
     suspend fun getJobs(): Resource<List<Result>> {
 
@@ -23,5 +25,14 @@ class JobsRepository @Inject constructor(private val api: JobsAPI) {
 
             Resource.Error(message = e.message.toString())
         }
+    }
+
+
+   suspend fun bookmarkJob(job : JobBookmark){
+        database.jobsDao().addJob(job)
+    }
+
+    suspend fun getBookMarkedJobs(): List<JobBookmark> {
+        return database.jobsDao().getJobs()
     }
 }

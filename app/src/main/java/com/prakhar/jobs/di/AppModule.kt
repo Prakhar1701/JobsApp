@@ -22,7 +22,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideJobsRepository(api: JobsAPI) = JobsRepository(api)
+    fun provideJobsRepository(api: JobsAPI, database: JobsDatabase) = JobsRepository(api, database)
 
         @Singleton
     @Provides

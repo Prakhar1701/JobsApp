@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "job_bookmarks")
 data class JobBookmark(
-    @ColumnInfo(name = "job_id") @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "job_id") @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String,
-    val phone: String,
+    val whatsapp_no: String,
     val place: String,
-    val salary: String
+    val salary: String,
+    val other_details: String
 )

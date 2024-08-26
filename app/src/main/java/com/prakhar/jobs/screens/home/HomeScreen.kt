@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +23,7 @@ import com.prakhar.jobs.screens.home.views.JobsView
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
@@ -52,7 +54,7 @@ fun HomeScreen(
 
                 composable(jobsTab.title) {
 
-                    JobsView(viewModel = viewModel)
+                    JobsView(navController, viewModel = viewModel)
                 }
 
                 composable(bookmarkTab.title) {

@@ -13,6 +13,6 @@ interface JobsDatabaseDao{
     suspend fun getJobs(): List<JobBookmark>
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addJob(job : JobBookmark)
 }

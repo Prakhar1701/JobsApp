@@ -24,12 +24,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.prakhar.jobs.model.Result
+import com.prakhar.jobs.navigation.Detail
 import com.prakhar.jobs.screens.home.HomeScreenViewModel
 
 @Composable
-fun JobsView(viewModel: HomeScreenViewModel){
-
+fun JobsView(navController: NavController,
+             viewModel: HomeScreenViewModel
+            ){
 
     Surface(
         color = MaterialTheme.colorScheme.background
@@ -39,7 +42,7 @@ fun JobsView(viewModel: HomeScreenViewModel){
                 .fillMaxSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Jobs",
@@ -50,15 +53,15 @@ fun JobsView(viewModel: HomeScreenViewModel){
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            JobColumn(viewModel = viewModel)
+            JobColumn(navController,viewModel = viewModel)
         }
     }
 }
 
 @Composable
 private fun JobColumn(
-    viewModel: HomeScreenViewModel
+    navController: NavController,
+    viewModel: HomeScreenViewModel,
 ) {
     val listOfJob = viewModel.listOfJob
 
@@ -87,11 +90,22 @@ private fun JobColumn(
         ) {
             items(listOfJob) { job ->
                 if (job.type == 1009) {
-                    JobCard(job = job)
+                    JobCard(job = job){
+                        navController.navigate(
+
+                            Detail(
+                                jobId = job.id,
+                                job.title,
+                                job.whatsapp_no,
+                                job.primary_details.Place,
+                                job.primary_details.Salary.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                job.other_details.takeIf { it.isNotEmpty() } ?: "No Data Available")
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
 }
 
 @Composable
@@ -162,4 +176,3 @@ fun JobCard(job: Result, onClick: () -> Unit = {}) {
         }
     }
 }
-
