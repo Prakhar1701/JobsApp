@@ -6,12 +6,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.prakhar.jobs.model.JobBookmark
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JobsDatabaseDao{
 
     @Query(value = "SELECT * FROM job_bookmarks")
-    suspend fun getJobs(): List<JobBookmark>
+    fun getJobs(): Flow<List<JobBookmark>>
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

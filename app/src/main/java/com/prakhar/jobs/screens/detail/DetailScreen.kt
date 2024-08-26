@@ -150,14 +150,4 @@ fun Detail.toJobBookmark(): JobBookmark {
     )
 }
 
-// Extension function to map JobBookmark to Detail
-fun JobBookmark.toDetail(): Detail {
-    return Detail(
-        jobId = this.id,
-        jobTitle = this.title,
-        jobWhatsappNumber = this.whatsapp_no,
-        jobPlace = this.place,
-        jobSalary = this.salary,
-        jobOtherDetails = this.other_details
-    )
-}
+

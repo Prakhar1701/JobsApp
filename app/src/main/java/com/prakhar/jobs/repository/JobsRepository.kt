@@ -5,6 +5,10 @@ import com.prakhar.jobs.data.Resource
 import com.prakhar.jobs.model.JobBookmark
 import com.prakhar.jobs.model.Result
 import com.prakhar.jobs.network.JobsAPI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class JobsRepository @Inject constructor(private val api: JobsAPI, private val database: JobsDatabase) {
@@ -36,8 +40,8 @@ class JobsRepository @Inject constructor(private val api: JobsAPI, private val d
        database.jobsDao().removeJob(job)
    }
 
-    suspend fun getBookMarkedJobs(): List<JobBookmark> {
-        return database.jobsDao().getJobs()
+    fun getBookmarkedJobs(): Flow<List<JobBookmark>> {
+        return database.jobsDao().getJobs().flowOn(Dispatchers.IO).conflate()
     }
 
     suspend fun isJobBookmarked(jobId: Int): Boolean{

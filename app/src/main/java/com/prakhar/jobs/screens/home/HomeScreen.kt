@@ -59,7 +59,7 @@ fun HomeScreen(
 
                 composable(bookmarkTab.title) {
 
-                    JobBookmark()
+                    JobBookmark(navController, viewModel)
                 }
             }
         }
