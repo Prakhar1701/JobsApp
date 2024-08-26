@@ -32,7 +32,15 @@ class JobsRepository @Inject constructor(private val api: JobsAPI, private val d
         database.jobsDao().addJob(job)
     }
 
+   suspend fun removeBookmarkJob(job: JobBookmark){
+       database.jobsDao().removeJob(job)
+   }
+
     suspend fun getBookMarkedJobs(): List<JobBookmark> {
         return database.jobsDao().getJobs()
+    }
+
+    suspend fun isJobBookmarked(jobId: Int): Boolean{
+        return database.jobsDao().isJobExists(jobId) == 1
     }
 }

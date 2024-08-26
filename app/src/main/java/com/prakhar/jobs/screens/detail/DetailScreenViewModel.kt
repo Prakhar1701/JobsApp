@@ -5,9 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prakhar.jobs.model.JobBookmark
 import com.prakhar.jobs.repository.JobsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,20 +26,23 @@ class DetailScreenViewModel @Inject constructor( private val jobsRepository: Job
 
     }
 
-    private fun removeJobBookmark() {
+    fun removeJobBookmark(job: JobBookmark) {
 
         viewModelScope.launch {
-
+           jobsRepository.removeBookmarkJob(job)
         }
 
     }
 
-    private fun checkJobBookmark() {
+     fun checkJobBookmark(id : Int) {
 
         viewModelScope.launch {
+
+            viewModelScope.launch {
+                isBookmarked = jobsRepository.isJobBookmarked(id)
+            }
 
         }
 
     }
-
 }

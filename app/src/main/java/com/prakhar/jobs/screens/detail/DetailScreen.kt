@@ -19,10 +19,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -48,12 +50,13 @@ import com.prakhar.jobs.navigation.Detail
 fun DetailScreen(jobDetail: Detail,
                  viewModel: DetailScreenViewModel = hiltViewModel()) {
 
+    viewModel.checkJobBookmark(jobDetail.jobId)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(top = 100.dp)
-            .padding(16.dp)
+            .padding(20.dp)
             .verticalScroll(rememberScrollState())
     ){
 
@@ -92,18 +95,39 @@ Column ( verticalArrangement = Arrangement.SpaceBetween,
             .width(120.dp),
         onClick = {
 
-            if(!viewModel.isBookmarked){
-                viewModel.addJobBookmark(
-                  jobDetail.toJobBookmark()
+
+            if(viewModel.isBookmarked){
+
+                viewModel.removeJobBookmark(
+                    jobDetail.toJobBookmark()
                 )
+
+                viewModel.isBookmarked = false
+
+            }else{
+
+                viewModel.addJobBookmark(
+                    jobDetail.toJobBookmark()
+                )
+                viewModel.isBookmarked = true
             }
+
         }
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Star,
-            contentDescription = "Bookmark Button",
-            modifier = Modifier.size(60.dp)
-        )
+        if (viewModel.isBookmarked){
+            Icon(
+                imageVector = Icons.Filled.Favorite,
+                contentDescription = "Bookmark Button",
+                modifier = Modifier.size(60.dp)
+            )
+        }else{
+            Icon(
+                imageVector = Icons.Outlined.FavoriteBorder,
+                contentDescription = "Bookmark Button",
+                modifier = Modifier.size(60.dp)
+            )
+        }
+
     }
 
 Spacer(modifier = Modifier.height(20.dp))
