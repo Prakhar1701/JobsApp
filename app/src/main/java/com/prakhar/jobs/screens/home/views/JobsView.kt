@@ -1,27 +1,13 @@
 package com.prakhar.jobs.screens.home.views
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,13 +20,11 @@ import com.prakhar.jobs.navigation.Detail
 import com.prakhar.jobs.screens.home.HomeScreenViewModel
 
 @Composable
-fun JobsView(navController: NavController,
-             viewModel: HomeScreenViewModel
-            ){
-
-    Surface(
-        color = MaterialTheme.colorScheme.background
-    ) {
+fun JobsView(
+    navController: NavController,
+    viewModel: HomeScreenViewModel
+) {
+    Surface(color = MaterialTheme.colorScheme.background) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,8 +39,7 @@ fun JobsView(navController: NavController,
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.bodyMedium
             )
-
-           JobsList(navController = navController, viewModel= viewModel)
+            JobsList(navController = navController, viewModel = viewModel)
         }
     }
 }
@@ -69,10 +52,8 @@ fun JobsList(
 ) {
     val response = viewModel.jobResponse.collectAsLazyPagingItems()
 
-    // Handle different load states
     when (response.loadState.refresh) {
         is LoadState.Loading -> {
-            // Show loading indicator when loading data
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -81,7 +62,6 @@ fun JobsList(
             }
         }
         is LoadState.Error -> {
-            // Show error message if there's an error
             val error = (response.loadState.refresh as LoadState.Error).error
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -96,7 +76,6 @@ fun JobsList(
             }
         }
         else -> {
-            // Only show the list when data is available and load is successful
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(1),
                 modifier = modifier.fillMaxSize()
@@ -104,25 +83,23 @@ fun JobsList(
                 items(response.itemCount) { index ->
                     val job = response[index]
                     job?.let {
-                        Card(onClick = {
-
-                            navController.navigate(
-
-                                Detail(
-                                    jobId = job.id,
-                                    jobTitle =   job.title.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                    jobWhatsappNumber =   job.whatsapp_no.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                    jobPlace = job.primary_details.Place.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                    jobSalary = job.primary_details.Salary.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                    jobOtherDetails = job.other_details.takeIf { it.isNotEmpty() } ?: "No Data Available"
+                        Card(
+                            onClick = {
+                                navController.navigate(
+                                    Detail(
+                                        jobId = job.id,
+                                        jobTitle = job.title.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                        jobWhatsappNumber = job.whatsapp_no.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                        jobPlace = job.primary_details.Place.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                        jobSalary = job.primary_details.Salary.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                        jobOtherDetails = job.other_details.takeIf { it.isNotEmpty() } ?: "No Data Available"
+                                    )
                                 )
-                            )
-
-                        },
+                            },
                             modifier = Modifier
                                 .padding(16.dp)
                                 .fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp), // Rounded corners
+                            shape = RoundedCornerShape(16.dp)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -139,9 +116,7 @@ fun JobsList(
                                     fontWeight = FontWeight.Bold,
                                     style = MaterialTheme.typography.titleMedium
                                 )
-
                                 Spacer(modifier = Modifier.height(8.dp))
-
                                 Text(
                                     text = "Phone: ${job.whatsapp_no ?: "-"}",
                                     color = MaterialTheme.colorScheme.onSurface,
@@ -149,9 +124,7 @@ fun JobsList(
                                     overflow = TextOverflow.Ellipsis,
                                     style = MaterialTheme.typography.titleSmall
                                 )
-
                                 Spacer(modifier = Modifier.height(8.dp))
-
                                 Text(
                                     text = "Location: ${job.primary_details?.Place ?: "-"}",
                                     color = MaterialTheme.colorScheme.onSurface,
@@ -159,9 +132,7 @@ fun JobsList(
                                     overflow = TextOverflow.Ellipsis,
                                     style = MaterialTheme.typography.titleSmall
                                 )
-
                                 Spacer(modifier = Modifier.height(8.dp))
-
                                 Text(
                                     text = "Salary: ${job.primary_details?.Salary ?: "-"}",
                                     color = MaterialTheme.colorScheme.onSurface,
@@ -169,14 +140,11 @@ fun JobsList(
                                     overflow = TextOverflow.Ellipsis,
                                     style = MaterialTheme.typography.titleSmall
                                 )
-
                                 Spacer(modifier = Modifier.height(30.dp))
                             }
                         }
                     }
                 }
-
-                // Handle paging loading states
                 response.apply {
                     when (loadState.append) {
                         is LoadState.Loading -> {
