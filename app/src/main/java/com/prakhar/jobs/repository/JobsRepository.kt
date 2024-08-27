@@ -13,22 +13,13 @@ import javax.inject.Inject
 
 class JobsRepository @Inject constructor(private val api: JobsAPI, private val database: JobsDatabase) {
 
-    suspend fun getJobs(): Resource<List<Result>> {
 
-        return try {
+    suspend fun getJobs(page : Int): List<Result> {
 
-            Resource.Loading(data = true)
+        val resultList = api.getJobs(page).results
 
-            val resultList = api.getJobs().results
+        return resultList
 
-            if (resultList.isNotEmpty()) Resource.Loading(data = false)
-
-            Resource.Success(data = resultList)
-
-        } catch (e: Exception) {
-
-            Resource.Error(message = e.message.toString())
-        }
     }
 
 

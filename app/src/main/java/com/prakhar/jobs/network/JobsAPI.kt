@@ -8,6 +8,10 @@ import javax.inject.Singleton
 @Singleton
 interface JobsAPI {
 
+    companion object {
+        const val BASE_URL = "https://testapi.getlokalapp.com/"
+    }
+
     @GET("common/jobs")
-    suspend fun getJobs(@Query("page") page: Int = 1): Jobs
+    suspend fun getJobs(@Query("page") page: Int): Jobs
 }

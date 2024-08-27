@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -69,27 +70,9 @@ private fun JobColumn(
 
     val jobBookmarkItemList = viewModel.jobItemList.collectAsState().value
  
-    Text(text = jobBookmarkItemList.size.toString())
-    if (viewModel.isLoading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-    } else if (!viewModel.isSuccess) {
+    Text(text = jobBookmarkItemList.size.toString(),
+        fontWeight = FontWeight.Bold)
 
-        Text(
-            text = "Something went wrong, unable to load jobs\u2757",
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.fillMaxWidth(),
-            // textAlign = Alignment.CenterHorizontally
-        )
-
-    } else {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -102,9 +85,9 @@ private fun JobColumn(
 
                             Detail(
                                 jobId = job.id,
-                                job.title,
-                                job.whatsapp_no,
-                                job.place,
+                                job.title.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                job.whatsapp_no.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                job.place.takeIf { it.isNotEmpty() } ?: "No Data Available",
                                 job.salary.takeIf { it.isNotEmpty() } ?: "No Data Available",
                                 job.other_details.takeIf { it.isNotEmpty() } ?: "No Data Available")
                         )
@@ -113,75 +96,66 @@ private fun JobColumn(
             }
         }
     }
-}
+
 
 
 
 @Composable
 fun JobCard(job: JobBookmark, onClick: () -> Unit = {}) {
-    Card(
-        shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
+    Card(onClick = { onClick() },
+
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp)
+            .padding(16.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp), // Rounded corners
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.surface
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Title:\n" + job.title,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium
-                )
+            Text(
+                text = job.title ?: "-",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 7,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium
+            )
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = "Phone: ${job.whatsapp_no}",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Normal,
-                    style = MaterialTheme.typography.titleSmall
-                )
+            Text(
+                text = "Phone: ${job.whatsapp_no ?: "-"}",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall
+            )
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = job.place,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium
-                )
+            Text(
+                text = "Location: ${job.place ?: "-"}",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall
+            )
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = job.salary,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
+            Text(
+                text = "Salary: ${job.salary?: "-"}",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.prakhar.jobs.data.JobsDatabase
 import com.prakhar.jobs.data.JobsDatabaseDao
+import com.prakhar.jobs.data.JobsPagingSource
 import com.prakhar.jobs.network.JobsAPI
 import com.prakhar.jobs.repository.JobsRepository
 import com.prakhar.jobs.utils.Constants.BASE_URL
@@ -22,9 +23,13 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideJobsPagingSource(jobsRepository: JobsRepository) =  JobsPagingSource(jobsRepository)
+
+    @Singleton
+    @Provides
     fun provideJobsRepository(api: JobsAPI, database: JobsDatabase) = JobsRepository(api, database)
 
-        @Singleton
+    @Singleton
     @Provides
     fun provideRecipesAPI(): JobsAPI {
         return Retrofit.Builder().baseUrl(BASE_URL)
