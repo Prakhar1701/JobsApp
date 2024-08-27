@@ -110,11 +110,11 @@ fun JobsList(
 
                                 Detail(
                                     jobId = job.id,
-                                  jobTitle =   job.title,
-                                  jobWhatsappNumber =   job.whatsapp_no,
-                                    jobPlace = job.primary_details.Place,
-                                    jobSalary = job.primary_details.Salary,
-                                    jobOtherDetails = job.other_details
+                                    jobTitle =   job.title.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                    jobWhatsappNumber =   job.whatsapp_no.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                    jobPlace = job.primary_details.Place.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                    jobSalary = job.primary_details.Salary.takeIf { it.isNotEmpty() } ?: "No Data Available",
+                                    jobOtherDetails = job.other_details.takeIf { it.isNotEmpty() } ?: "No Data Available"
                                 )
                             )
 
