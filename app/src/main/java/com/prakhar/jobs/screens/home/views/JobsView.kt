@@ -1,10 +1,21 @@
 package com.prakhar.jobs.screens.home.views
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.prakhar.jobs.model.Result
 import com.prakhar.jobs.navigation.Detail
 import com.prakhar.jobs.screens.home.HomeScreenViewModel
 
@@ -61,6 +73,7 @@ fun JobsList(
                 CircularProgressIndicator()
             }
         }
+
         is LoadState.Error -> {
             val error = (response.loadState.refresh as LoadState.Error).error
             Box(
@@ -68,81 +81,27 @@ fun JobsList(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = error.localizedMessage ?: "Failed to load data. Please check your internet connection.",
+                    text = error.localizedMessage
+                        ?: "Failed to load data. Please check your internet connection.",
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
+
         else -> {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(1),
                 modifier = modifier.fillMaxSize()
             ) {
+
                 items(response.itemCount) { index ->
                     val job = response[index]
                     job?.let {
-                        Card(
-                            onClick = {
-                                navController.navigate(
-                                    Detail(
-                                        jobId = job.id,
-                                        jobTitle = job.title.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                        jobWhatsappNumber = job.whatsapp_no.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                        jobPlace = job.primary_details.Place.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                        jobSalary = job.primary_details.Salary.takeIf { it.isNotEmpty() } ?: "No Data Available",
-                                        jobOtherDetails = job.other_details.takeIf { it.isNotEmpty() } ?: "No Data Available"
-                                    )
-                                )
-                            },
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(16.dp),
-                                horizontalAlignment = Alignment.Start,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = job.title ?: "-",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    maxLines = 7,
-                                    overflow = TextOverflow.Ellipsis,
-                                    fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "Phone: ${job.whatsapp_no ?: "-"}",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "Location: ${job.primary_details?.Place ?: "-"}",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "Salary: ${job.primary_details?.Salary ?: "-"}",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                                Spacer(modifier = Modifier.height(30.dp))
-                            }
-                        }
+
+                        if (job.type == 1009)
+                            JobCard(navController, job)
                     }
                 }
                 response.apply {
@@ -157,6 +116,7 @@ fun JobsList(
                                 }
                             }
                         }
+
                         is LoadState.Error -> {
                             item {
                                 Text(
@@ -167,12 +127,85 @@ fun JobsList(
                                 )
                             }
                         }
+
                         else -> {
                             // Do nothing
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+
+@Composable
+private fun JobCard(
+    navController: NavController,
+    job: Result
+) {
+
+    Card(
+
+        onClick = {
+            navController.navigate(
+                Detail(
+                    jobId = job.id,
+                    jobTitle = job.title.takeIf { !it.isNullOrEmpty() } ?: "-",
+                    jobWhatsappNumber = job.whatsapp_no.takeIf { !it.isNullOrEmpty() } ?: "-",
+                    jobPlace = job.primary_details.Place.takeIf { !it.isNullOrEmpty() } ?: "-",
+                    jobSalary = job.primary_details.Salary.takeIf { !it.isNullOrEmpty() } ?: "-",
+                    jobOtherDetails = job.other_details.takeIf { !it.isNullOrEmpty() }
+                        ?: "No Data Available"
+                )
+            )
+        },
+
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = job.title.takeIf { !it.isNullOrEmpty() } ?: "-",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 7,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Phone: ${job.whatsapp_no.takeIf { !it.isNullOrEmpty() } ?: "-"}",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Location: ${job.primary_details.Place.takeIf { !it.isNullOrEmpty() } ?: "-"}",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Salary: ${job.primary_details.Salary.takeIf { !it.isNullOrEmpty() } ?: "-"}",
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleSmall
+            )
+            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 }
