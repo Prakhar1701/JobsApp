@@ -1,7 +1,5 @@
 # Jobs
 
-## Android Intern Assignment: Lokal
-
 This is an Android application built as part of an internship assignment. The app allows users to browse and bookmark job listings, with offline viewing support for bookmarked jobs. It implements modern Android development best practices with a focus on clean architecture, UI/UX, and performance.
 
 ## Features
@@ -20,7 +18,7 @@ This is an Android application built as part of an internship assignment. The ap
 
 - **State Management**:
   - Proper handling of different states like loading, error, and empty data views.
-  
+
 ## Tech Stack
 - **Programming Language**: Kotlin
 - **UI**: Jetpack Compose
@@ -32,22 +30,10 @@ This is an Android application built as part of an internship assignment. The ap
 
   1. Clone the repository
   2. Open the project in Android Studio.
-  3.  Build and run the app on an emulator or a physical device.
+  3. Build and run the app on an emulator or a physical device.
 
 ## Video Demo
 
 Watch the video demo of the app:
 
 [Video-Demo](https://drive.google.com/file/d/1P2EyeNhYM0_iXslAjDiUHsm3uJv1WMmx/view?usp=sharing)
-
-
-## Thank You
-
-Dear Reviewer,
-
-Thank you for taking the time to evaluate my assignment. I truly appreciate the opportunity to work on this project, as it allowed me to apply my skills in Android development while adhering to clean architecture and best practices. Completing this assignment was an enjoyable and rewarding experience.
-
-I am confident that I have met all the specified requirements and hope that my work aligns with your expectations. I look forward to your valuable feedback.
-
-Best regards,  
-Prakhar
