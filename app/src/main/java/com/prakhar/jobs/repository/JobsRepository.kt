@@ -1,7 +1,6 @@
 package com.prakhar.jobs.repository
 
 import com.prakhar.jobs.data.JobsDatabase
-import com.prakhar.jobs.data.Resource
 import com.prakhar.jobs.model.JobBookmark
 import com.prakhar.jobs.model.Result
 import com.prakhar.jobs.network.JobsAPI

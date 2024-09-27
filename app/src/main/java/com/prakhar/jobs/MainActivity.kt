@@ -2,7 +2,6 @@ package com.prakhar.jobs
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,16 +12,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.room.Room
-import com.prakhar.jobs.data.JobsDatabase
-import com.prakhar.jobs.model.JobBookmark
 import com.prakhar.jobs.navigation.JobsNavigation
 import com.prakhar.jobs.repository.JobsRepository
 import com.prakhar.jobs.ui.theme.JobsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
